@@ -1,0 +1,8 @@
+# Normalizar finales de línea a LF en el repositorio (evita ruido CRLF en Windows).
+* text=auto eol=lf
+
+# Binarios: sin conversión.
+*.png binary
+*.jpg binary
+*.pdf binary
+*.ico binary

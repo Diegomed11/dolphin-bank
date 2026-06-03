@@ -1,0 +1,103 @@
+openapi: 3.1.0
+info:
+  title: Core Bancario - Identidad & Acceso
+  version: 0.1.0
+  description: |
+    Contrato del dominio de Identidad. Diseñado contract-first antes de implementar.
+    Flujo de login en dos pasos: credenciales -> MFA -> tokens.
+servers:
+  - url: http://localhost:8000
+    description: Local
+paths:
+  /auth/register:
+    post:
+      operationId: register
+      tags: [identity]
+      summary: Registrar un nuevo usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RegisterRequest' }
+      responses:
+        '201':
+          description: Usuario creado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/UserPublic' }
+        '409': { description: El email ya está registrado }
+        '422': { description: Datos inválidos }
+  /auth/login:
+    post:
+      operationId: login
+      tags: [identity]
+      summary: Iniciar sesión (paso 1 - credenciales)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/LoginRequest' }
+      responses:
+        '200':
+          description: Credenciales válidas; se requiere MFA
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mfa_token: { type: string, description: Token temporal para el paso de MFA }
+        '401': { description: Credenciales inválidas }
+        '429': { description: Demasiados intentos (rate limit) }
+  /auth/mfa/verify:
+    post:
+      operationId: verifyMfa
+      tags: [identity]
+      summary: Verificar MFA (paso 2) y emitir tokens
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/MFAVerifyRequest' }
+      responses:
+        '200':
+          description: MFA correcto; tokens emitidos
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TokenPair' }
+        '401': { description: Código MFA inválido o expirado }
+components:
+  schemas:
+    RegisterRequest:
+      type: object
+      required: [email, password, full_name]
+      properties:
+        email: { type: string, format: email }
+        password: { type: string, minLength: 12 }
+        full_name: { type: string, minLength: 2, maxLength: 120 }
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email: { type: string, format: email }
+        password: { type: string }
+    MFAVerifyRequest:
+      type: object
+      required: [mfa_token, code]
+      properties:
+        mfa_token: { type: string }
+        code: { type: string, minLength: 6, maxLength: 6 }
+    TokenPair:
+      type: object
+      properties:
+        access_token: { type: string }
+        refresh_token: { type: string }
+        token_type: { type: string, default: bearer }
+    UserPublic:
+      type: object
+      properties:
+        id: { type: string }
+        email: { type: string, format: email }
+        full_name: { type: string }
+        roles:
+          type: array
+          items: { type: string }
