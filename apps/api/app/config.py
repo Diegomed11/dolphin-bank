@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     app_env: str = "development"
     app_debug: bool = True
 
-    database_url: str = "postgresql+psycopg://banco:banco@db:5432/core_bancario"
+    database_url: str = "postgresql+psycopg://banco:banco@db:5432/dolphin_bank"
     redis_url: str = "redis://cache:6379/0"
 
     # Default solo para arranque local; en cualquier entorno real se inyecta por env.

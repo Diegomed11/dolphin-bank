@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: Core Bancario - Identidad & Acceso
+  title: Bank Dolphin - Identidad & Acceso
   version: 0.1.0
   description: |
     Contrato del dominio de Identidad. Diseñado contract-first antes de implementar.

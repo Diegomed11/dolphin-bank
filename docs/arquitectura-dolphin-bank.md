@@ -1,4 +1,4 @@
-# Arquitectura — Core Bancario Demo
+# Arquitectura — Bank Dolphin 🐬
 
 > Documento vivo de arquitectura. Versión 0.4 — base para iterar por fases.
 > Autor: Diego — desarrollo en solitario (full-stack + infra + seguridad).
@@ -57,7 +57,7 @@ Cada dominio = un módulo con su propia lógica, comunicado por interfaces expl�
 graph TB
     Cliente["👤 Cliente final<br/>(web + móvil)"]
     Operador["🧑‍💼 Operador interno<br/>(CRM/ERP)"]
-    Sistema["🏦 Core Bancario Demo"]
+    Sistema["🏦 Bank Dolphin"]
     Email["📧 Proveedor de email (SES)"]
     KYC["🪪 Proveedor KYC (simulado)"]
 
@@ -351,7 +351,7 @@ El objetivo es **verse mejor que la app de un banco tradicional** — ahí sí p
 ## 12. Estructura sugerida del monorepo
 
 ```
-core-bancario/
+dolphin-bank/
 ├── apps/
 │   ├── web/                 # Next.js + Tailwind + ShadCN
 │   ├── mobile/              # Flutter (Android + iOS)

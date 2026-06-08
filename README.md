@@ -1,8 +1,8 @@
-# 🏦 Core Bancario Demo
+# 🐬 Bank Dolphin
 
 > Sistema bancario **demo** de extremo a extremo: core transaccional + CRM + ERP, desplegado en AWS, con seguridad de nivel bancario, web y móvil.
 
-[![CI](https://github.com/Diegomed11/core-bancario/actions/workflows/ci.yml/badge.svg)](https://github.com/Diegomed11/core-bancario/actions/workflows/ci.yml)
+[![CI](https://github.com/Diegomed11/dolphin-bank/actions/workflows/ci.yml/badge.svg)](https://github.com/Diegomed11/dolphin-bank/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.12-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-009688)
 ![License](https://img.shields.io/badge/license-MIT-green)
@@ -26,7 +26,7 @@ Un sistema que demuestra cómo se construye un banco moderno de forma correcta y
 - **Apps web y móvil** sobre las mismas APIs.
 - Desplegado en **AWS** con IaC (Terraform) y CI/CD.
 
-La arquitectura completa está en [`docs/arquitectura-core-bancario.md`](docs/arquitectura-core-bancario.md).
+La arquitectura completa está en [`docs/arquitectura-dolphin-bank.md`](docs/arquitectura-dolphin-bank.md).
 
 ---
 
@@ -44,10 +44,34 @@ La arquitectura completa está en [`docs/arquitectura-core-bancario.md`](docs/ar
 
 ---
 
+## Estado del proyecto
+
+> Actualizado: junio 2026 · Versión 0.1.0
+
+**Fase 0 (Fundaciones) — ✅ completada.** El repositorio arranca en local de extremo a extremo, con migraciones de base de datos y un pipeline de CI con seguridad desde el día uno.
+
+| Componente | Estado | Notas |
+|---|---|---|
+| Monorepo + estructura modular | ✅ | `apps/api` (FastAPI), `openapi/`, `infra/`, `security/`, `docs/` |
+| Contratos OpenAPI (Identidad, Cuentas) | ✅ | Contract-first, antes de implementar |
+| API FastAPI con `/health` | ✅ | Módulos `identity` y `accounts` registrados |
+| Endpoints de Identidad y Cuentas | 🟡 stubs | Devuelven `501 Not Implemented` — se implementan en Fase 1 |
+| Base de datos + migraciones (Alembic) | ✅ | Migración baseline `users` + `accounts`; corre sola en `docker compose up` |
+| Docker Compose local (API + Postgres + Redis) | ✅ | Un comando levanta todo |
+| CI: lint + tests + SAST + SCA + secret scan | ✅ | `ruff`, `bandit`, `pip-audit`, `gitleaks` en GitHub Actions |
+| Suite local | ✅ verde | `ruff` · `bandit` (0 hallazgos) · `pytest` |
+| Web (Next.js) | ⏳ pendiente | Fase 1+ |
+| Móvil (Flutter) | ⏳ pendiente | Fase 5 |
+| Infra AWS (Terraform) | ⏳ pendiente | Fase 6 |
+
+Leyenda: ✅ hecho · 🟡 esqueleto / parcial · ⏳ pendiente
+
+---
+
 ## Estructura del repo
 
 ```
-core-bancario/
+dolphin-bank/
 ├── apps/
 │   ├── api/                 # Backend FastAPI (monolito modular)
 │   ├── web/                 # Frontend web (próximamente)
@@ -67,18 +91,19 @@ Requisitos: [Docker](https://docs.docker.com/get-docker/) y Docker Compose.
 
 ```bash
 # 1. Clonar
-git clone https://github.com/Diegomed11/core-bancario.git
-cd core-bancario
+git clone https://github.com/Diegomed11/dolphin-bank.git
+cd dolphin-bank
 
 # 2. Copiar variables de entorno
 cp .env.example .env
 
 # 3. Levantar todo (API + Postgres + Redis)
+#    Aplica las migraciones de Alembic automáticamente antes de arrancar.
 docker compose up --build
 
 # 4. Verificar
 curl http://localhost:8000/health
-# -> {"status":"ok"}
+# -> {"status":"ok","env":"development"}
 ```
 
 La documentación interactiva de la API queda en **http://localhost:8000/docs** (Swagger UI, autogenerada por FastAPI).
@@ -89,15 +114,14 @@ La documentación interactiva de la API queda en **http://localhost:8000/docs** 
 
 ```bash
 cd apps/api
-python -m venv .venv && source .venv/bin/activate
+python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
-alembic upgrade head        # aplica las migraciones de la BD
+
+# Aplicar migraciones (requiere una Postgres accesible vía DATABASE_URL)
+alembic upgrade head
+
 uvicorn app.main:app --reload
 ```
-
-> Las migraciones de base de datos se gestionan con **Alembic** (`apps/api/migrations`).
-> Crear una nueva: `alembic revision --autogenerate -m "mensaje"`. Aplicarlas: `alembic upgrade head`.
-> En Docker, `docker compose up` corre `alembic upgrade head` automáticamente antes de levantar la API.
 
 ---
 
@@ -118,14 +142,29 @@ Estas mismas verificaciones corren automáticamente en cada push vía GitHub Act
 
 ## Roadmap
 
-- [x] **Fase 0** — Fundaciones: scaffolding, contratos OpenAPI, CI con seguridad
+- [x] **Fase 0** — Fundaciones: scaffolding, contratos OpenAPI, migraciones, CI con seguridad
 - [ ] **Fase 1** — Identidad (MFA, RBAC) + Cuentas
 - [ ] **Fase 2** — ⭐ Ledger de doble partida + transferencias + auditoría
 - [ ] **Fase 3** — CRM (onboarding, KYC)
 - [ ] **Fase 4** — ERP / Contabilidad
-- [ ] **Fase 5** — App móvil
+- [ ] **Fase 5** — App móvil (Flutter)
 - [ ] **Fase 6** — Despliegue en AWS + endurecimiento + lab de seguridad
 - [ ] **Fase 7** — Antifraude con ML (opcional)
+
+---
+
+## Qué sigue (Fase 1)
+
+El núcleo de la siguiente fase es **Identidad + Cuentas**, con seguridad real:
+
+- Registro con hash **Argon2id** y validación estricta (Pydantic).
+- Login en dos pasos + **MFA (TOTP)**.
+- **JWT de vida corta** + refresh tokens rotativos.
+- **RBAC** (cliente / operador / admin), `default = denegar`.
+- Apertura y listado de cuentas con protección contra **IDOR** (verificación de propiedad del recurso).
+- Tests de autorización (intentos de escalamiento, acceso cruzado).
+
+Después llega el hito estrella (**Fase 2**): el ledger de doble partida con idempotencia, concurrencia segura y auditoría inmutable.
 
 ---
 

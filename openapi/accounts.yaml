@@ -1,6 +1,6 @@
 openapi: 3.1.0
 info:
-  title: Core Bancario - Cuentas
+  title: Bank Dolphin - Cuentas
   version: 0.1.0
   description: Contrato del dominio de Cuentas. Saldos en centavos (entero).
 servers:

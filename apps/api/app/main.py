@@ -1,4 +1,4 @@
-"""Punto de entrada de la API del core bancario."""
+"""Punto de entrada de la API de Bank Dolphin."""
 from fastapi import FastAPI
 
 from app.config import settings
@@ -6,7 +6,7 @@ from app.modules.accounts.router import router as accounts_router
 from app.modules.identity.router import router as identity_router
 
 app = FastAPI(
-    title="Core Bancario Demo",
+    title="Bank Dolphin",
     version="0.1.0",
     description="Sistema bancario demo. Datos sintéticos únicamente.",
 )

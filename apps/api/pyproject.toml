@@ -1,7 +1,7 @@
 [project]
-name = "core-bancario-api"
+name = "dolphin-bank-api"
 version = "0.1.0"
-description = "Core bancario demo - API"
+description = "Bank Dolphin - API"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.111",
