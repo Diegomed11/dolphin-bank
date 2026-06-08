@@ -30,3 +30,9 @@ build/
 .vscode/
 .idea/
 .DS_Store
+
+# Claude / asistentes IA
+.claude/
+CLAUDE.md
+.claude.json
+.mcp.json
