@@ -9,7 +9,7 @@
 
 ---
 
-## ⚠️ Aviso
+
 
 Este es un **proyecto demostrativo de portafolio**. No es un banco real, no opera dinero real, no busca licencia regulatoria y **no debe usarse con datos reales de personas**. Todo el manejo de datos se hace con información sintética.
 
