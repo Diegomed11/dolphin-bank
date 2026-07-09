@@ -1,4 +1,4 @@
-# Infraestructura (Terraform / AWS)
+# Infraestructura 
 
 Pendiente — **Fase 6**.
 
