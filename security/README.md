@@ -8,7 +8,7 @@ Carpeta de artefactos de seguridad del proyec
 - `audit-reports/` — reportes de las pruebas en laboratorio controlado
 
 ## Recordatorio
-Todo testing de seguridad se hace contra **este sistema**, en **entorno aislado**,
+Todo testing de seguridad se hace contra **este sistema**, en **entorno aislado**
 con **datos sintéticos**. Nunca contra terceros ni con datos reales.
 
 ## Pipeline de seguridad (ya activo desde Fase 0)
