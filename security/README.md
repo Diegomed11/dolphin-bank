@@ -1,6 +1,6 @@
 # Seguridad
 
-Carpeta de artefactos de seguridad del proyecto.
+Carpeta de artefactos de seguridad del proyec
 
 ## Contenido (se irá poblando)
 - `threat-model.md` — modelo STRIDE por dominio
