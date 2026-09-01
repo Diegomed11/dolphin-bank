@@ -2,6 +2,7 @@
 
 > Sistema bancario **demo** de extremo a extremo: core transaccional + CRM + ERP, desplegado en AWS, con seguridad de nivel bancario, web y móvil
 
+
 [![CI](https://github.com/Diegomed11/dolphin-bank/actions/workflows/ci.yml/badge.svg)](https://github.com/Diegomed11/dolphin-bank/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.12-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-009688)
